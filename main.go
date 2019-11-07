@@ -1,3 +1,5 @@
+//go:generate go-bindata -nomemcopy -o bindata.go dat/...
+
 package main
 
 import (
