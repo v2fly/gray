@@ -24,7 +24,7 @@ import (
 
 const (
 	v2Assert    = "v2ray.location.asset"
-	assetperfix = "/dev/libv2rayfs0/asset"
+	assetperfix = "v2rayfs0"
 )
 
 var (
@@ -139,12 +139,12 @@ func init() {
 
 	os.Setenv(v2Assert, assetperfix)
 	//Now we handle read
-	v2filesystem.NewFileReader = func(path string) (io.ReadCloser, error) {
-		if strings.HasPrefix(path, assetperfix) {
-			p := path[len(assetperfix)+1:]
-			bin := MustAsset(p)
+	v2filesystem.NewFileReader = func(filepath string) (io.ReadCloser, error) {
+		if strings.HasPrefix(filepath, assetperfix) {
+			b := filepath[len(assetperfix)+1:]
+			bin := MustAsset("dat/"+b)
 			return ioutil.NopCloser(bytes.NewReader(bin)), nil
 		}
-		return os.Open(path)
+		return os.Open(filepath)
 	}
 }
