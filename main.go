@@ -144,8 +144,9 @@ func init() {
 	v2filesystem.NewFileReader = func(filepath string) (io.ReadCloser, error) {
 		if strings.HasPrefix(filepath, assetperfix) {
 			b := filepath[len(assetperfix)+1:]
-			bin := MustAsset("dat/"+b)
-			return ioutil.NopCloser(bytes.NewReader(bin)), nil
+			if bin, err := Asset("dat/"+b); err == nil{
+				return ioutil.NopCloser(bytes.NewReader(bin)), nil
+			}
 		}
 		return os.Open(filepath)
 	}
