@@ -22,8 +22,9 @@ jobs:
 
     - name: Build
       run: |
-        GOOS=linux GOARCH=amd64 go build -ldflags='-s -w' -v -o gray_amd64_linux .
-        GOOS=windows GOARCH=amd64 go build -ldflags='-s -w -H windowsgui' -v -o gray_amd64_windows.exe .
+        GITVER=$(git describe --tags || git rev-parse --short HEAD)
+        GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.MAINVER=${GITVER}" -v -o gray_amd64_linux .
+        GOOS=windows GOARCH=amd64 go build -ldflags='-s -w -X main.MAINVER=${GITVER} -H windowsgui' -v -o gray_amd64_windows.exe .
 
     - name: Create Release
       id: create_release

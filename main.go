@@ -29,9 +29,10 @@ const (
 
 var (
 	configFile = flag.String("config", "", "Config file for V2Ray.")
-	version    = flag.Bool("version", false, "Show current version of V2Ray.")
+	version    = flag.Bool("version", false, "Show current version.")
 	test       = flag.Bool("test", false, "Test config file only, without launching V2Ray server.")
 	format     = flag.String("format", "json", "Format of input file.")
+	MAINVER    = "0.0.0-src"
 )
 
 func fileExists(file string) bool {
@@ -89,10 +90,7 @@ func startV2Ray() (core.Server, error) {
 }
 
 func printVersion() {
-	version := core.VersionStatement()
-	for _, s := range version {
-		fmt.Println(s)
-	}
+	fmt.Printf("gray [%s] Yet another distribution of v2ray (v2ray-core: %s)\n", MAINVER, core.Version())
 }
 
 func main() {
