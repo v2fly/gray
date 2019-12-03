@@ -29,37 +29,16 @@ jobs:
         GITVER=$(git describe --tags || git rev-parse --short HEAD)
         GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.MAINVER=${GITVER}" -v -o gray_amd64_linux .
         GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.MAINVER=${GITVER}" -v -o gray_amd64_windows.exe .
+        zip gray_amd64_linux.zip gray_amd64_linux  
+        zip gray_amd64_windows.zip gray_amd64_windows
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.0.0
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          gray_amd64_linux.zip 
+          gray_amd64_windows.zip 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: true
-        prerelease: false
-
-    - name: Upload Release Asset
-      id: upload-release-asset1
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./gray_amd64_linux
-        asset_name: gray_amd64_linux
-        asset_content_type: application/octet-stream
-
-    - name: Upload Release Asset
-      id: upload-release-asset2
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./gray_amd64_windows.exe
-        asset_name: gray_amd64_windows.exe
-        asset_content_type: application/octet-stream
 
