@@ -30,7 +30,7 @@ jobs:
         GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.MAINVER=${GITVER}" -v -o gray_amd64_linux .
         GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.MAINVER=${GITVER}" -v -o gray_amd64_windows.exe .
         zip gray_amd64_linux.zip gray_amd64_linux  
-        zip gray_amd64_windows.zip gray_amd64_windows
+        zip gray_amd64_windows.zip gray_amd64_windows.exe
 
     - name: Release
       uses: softprops/action-gh-release@v1
